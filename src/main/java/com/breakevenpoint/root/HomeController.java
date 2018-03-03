@@ -73,11 +73,16 @@ public class HomeController implements ApplicationContextAware {
 
 	private String readFromInputStream(InputStream inputStream) throws IOException {
 		StringBuilder resultStringBuilder = new StringBuilder();
-		try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+		try {
 			String line;
+			BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 			while ((line = br.readLine()) != null) {
 				resultStringBuilder.append(line).append("\n");
 			}
+		} catch (Exception ex) {
+
+		} finally {
+			
 		}
 		return resultStringBuilder.toString();
 	}

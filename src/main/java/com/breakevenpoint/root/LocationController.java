@@ -41,20 +41,18 @@ public class LocationController implements ApplicationContextAware {
 		logger.info("Welcome home! The client locale is {}.", locale);
 
 		Resource resource = this.context.getResource("classpath:locationdb.txt");
-		/*try {
-			InputStream dbAsStream = resource.getInputStream(); // <-- this is the difference
-			String data = readFromInputStream(dbAsStream);
-
-			logger.info("File Contents" + data);
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+		/*
+		 * try { InputStream dbAsStream = resource.getInputStream(); // <-- this is the
+		 * difference String data = readFromInputStream(dbAsStream);
+		 * 
+		 * logger.info("File Contents" + data);
+		 * 
+		 * } catch (IOException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 */
 		//
-		
+
 		model.addAttribute("currentLoc", mockLocation());
-		
 
 		return "location";
 	}
@@ -66,11 +64,16 @@ public class LocationController implements ApplicationContextAware {
 
 	private String readFromInputStream(InputStream inputStream) throws IOException {
 		StringBuilder resultStringBuilder = new StringBuilder();
-		try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+		try {
 			String line;
+			BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 			while ((line = br.readLine()) != null) {
 				resultStringBuilder.append(line).append("\n");
 			}
+		} catch (Exception ex) {
+
+		} finally {
+
 		}
 		return resultStringBuilder.toString();
 	}
