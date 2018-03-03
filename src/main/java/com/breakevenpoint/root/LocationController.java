@@ -21,30 +21,27 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.breakevenpoint.root.models.Location;
+
 /**
  * Handles requests for the application home page.
  */
 @Controller
-public class HomeController implements ApplicationContextAware {
+@RequestMapping("location")
+public class LocationController implements ApplicationContextAware {
 
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	private static final Logger logger = LoggerFactory.getLogger(LocationController.class);
 	ApplicationContext context = null;
 
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "/track", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-
-		String formattedDate = dateFormat.format(date);
-
-		model.addAttribute("serverTime", formattedDate);
 		Resource resource = this.context.getResource("classpath:locationdb.txt");
-		try {
+		/*try {
 			InputStream dbAsStream = resource.getInputStream(); // <-- this is the difference
 			String data = readFromInputStream(dbAsStream);
 
@@ -53,17 +50,13 @@ public class HomeController implements ApplicationContextAware {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		//
-		logger.info("Writing to file");
-		try {
-			writeToInputStream("New data", resource.getFilename());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		model.addAttribute("currentLoc", mockLocation());
+		
 
-		return "home";
+		return "location";
 	}
 
 	@Override
@@ -92,6 +85,16 @@ public class HomeController implements ApplicationContextAware {
 		writer.close();
 
 		return true;
+	}
+
+	private Location mockLocation() {
+		Location mock = new Location();
+		mock.setBibNo("RQ-069");
+		mock.setLat(19.700792);
+		mock.setLongitude(72.751994);
+		mock.setRiderName("Neeraj, Palghar");
+		mock.setLastUpdated(new Date());
+		return mock;
 	}
 
 }
