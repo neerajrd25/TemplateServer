@@ -4,6 +4,12 @@ import java.util.Date;
 
 public class Location {
 
+	@Override
+	public String toString() {
+		return "Location [riderName=" + riderName + ", lat=" + lat + ", longitude=" + longitude + ", bibNo=" + bibNo
+				+ ", lastUpdated=" + lastUpdated + "]";
+	}
+
 	String riderName;
 	double lat;
 	double longitude;
