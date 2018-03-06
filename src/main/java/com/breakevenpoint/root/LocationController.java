@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.breakevenpoint.root.models.Location;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * Handles requests for the application home page.
@@ -53,11 +54,15 @@ public class LocationController implements ApplicationContextAware {
 	@RequestMapping(value = { "/submitLoc" }, method = RequestMethod.POST)
 	public String submitLocation(Model model, HttpServletRequest request, Locale locale,
 			@RequestBody String locationJSON) {
-		System.out.println(locationJSON);
+		logger.info("Service JSON->" + locationJSON);
+
 		// JSONObject jsonObj = new
 		// JSONObject("{\"phonetype\":\"N95\",\"cat\":\"WP\"}");
-
-		Gson gson = new Gson();
+		GsonBuilder gsonBuilder = new GsonBuilder();
+        // "Mar 5, 2018 4:28:12 PM
+        //gsonBuilder.setDateFormat("MMM MM-dd hh:mm:ss a");
+        gsonBuilder.setDateFormat("dd MMM yyyy HH:mm:ss");
+        	Gson gson = gsonBuilder.create();
 		CURRENT_LOCATION = gson.fromJson(locationJSON, Location.class);
 
 		logger.info("Service DATA->" + CURRENT_LOCATION);
