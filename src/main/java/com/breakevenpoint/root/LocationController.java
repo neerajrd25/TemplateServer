@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.breakevenpoint.root.models.Location;
@@ -69,6 +70,24 @@ public class LocationController implements ApplicationContextAware {
 		return "SUCCESS";
 	}
 
+	@ResponseBody
+	@RequestMapping(value = { "/submitLocGET" }, method = RequestMethod.GET)
+	public String submitLocationGet(HttpServletRequest request) {
+		String lat = request.getParameter("lat");
+		String lg= request.getParameter("lg");
+		String lastUpdated= request.getParameter("lastUpdated");
+		Date d = new Date(Long.parseLong(lastUpdated));
+		logger.info("Tracking service lt "+  lat );
+		logger.info("Tracking service lg :"+lg );
+		logger.info("Tracking service lastUpdated:"+d);
+		CURRENT_LOCATION.setLat(Double.valueOf(lat));
+		CURRENT_LOCATION.setLongitude(Double.valueOf(lg));
+		CURRENT_LOCATION.setLastUpdated(d);
+		logger.info("Tracking service Obj "+  CURRENT_LOCATION );
+
+		return "SUCCESS";
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = { "/demo" }, method = RequestMethod.GET)
 	public String addAppointment() {
