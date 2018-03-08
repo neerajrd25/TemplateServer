@@ -55,6 +55,8 @@ body {
 				<div id="googleMap" style="width: 100%; height: 400px;"></div>
 			</div>
 		</div>
+
+<br/>
 		<div class="row">
 			<div class="col-lg-8">
 				<ul class="nav nav-pills">
@@ -71,32 +73,43 @@ body {
 							<th>Athelete</th>
 							<th>Bib No</th>
 							<th>Last Updated</th>
+							<th>Locate</th>
+
 						</tr>
 					</thead>
 					<tbody>
+						<c:forEach items="${users}" var="currentLoc" varStatus="loop">
+
+							<tr>
+								<th scope="row">${loop.index+1}</th>
+								<td>${currentLoc.riderName}</td>
+								<td>${currentLoc.bibNo}</td>
+								<td>
+									<p>
+										<fmt:formatDate type="both" value="${currentLoc.lastUpdated}" />
+									</p>
+								</td>
+								<td><button class="btn btn-info" data-toggle="tooltip" title="Locate ${currentLoc.userId}">Locate</button></td>
+
+							</tr>
+						</c:forEach>
+
 						<tr>
-							<th scope="row">1</th>
-							<td>${currentLoc.riderName}</td>
-							<td>${currentLoc.bibNo}</td>
-							<td>
-								<p>
-									<fmt:formatDate type="both" value="${currentLoc.lastUpdated}" />
-								</p>
-							</td>
-						</tr>
-						<tr>
-							<th scope="row">2</th>
+							<th scope="row">4</th>
 							<td>Kabir, Mumbai</td>
 							<td>RQ-62</td>
 							<td><fmt:formatDate type="both"
 									value="${currentLoc.lastUpdated}" /></td>
+							<td><button class="btn btn-info">Locate</button></td>
+
 						</tr>
 						<tr>
-							<th scope="row">3</th>
-							<td>Divya, Pune</td>
-							<td>RQ-01</td>
+							<th scope="row">5</th>
+							<td>Neeraj, Pune</td>
+							<td>RQ-069</td>
 							<td><fmt:formatDate type="both"
 									value="${currentLoc.lastUpdated}" /></td>
+							<td><button class="btn btn-info">Locate</button></td>
 						</tr>
 					</tbody>
 				</table>
@@ -119,19 +132,13 @@ body {
 						<td><input type="checkbox" val="all" /></td>
 						<td>All</td>
 					</tr>
-
-					<tr>
-						<td><input type="checkbox" val="neeraj" checked="checked" /></td>
-						<td>${currentLoc.riderName}</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox" val="neeraj" checked="checked" /></td>
-						<td>Divya</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox" val="neeraj" checked="checked" /></td>
-						<td>Kabir</td>
-					</tr>
+					<c:forEach items="${users}" var="currentLoc">
+						<tr>
+							<td><input type="checkbox" val="${currentLoc.userId}"
+								checked="checked" /></td>
+							<td>${currentLoc.riderName}</td>
+						</tr>
+					</c:forEach>
 					<tr>
 						<td><input type="checkbox" val="neeraj" /></td>
 						<td>Amit</td>
@@ -142,7 +149,7 @@ body {
 					</tr>
 					<tr>
 						<td><input type="checkbox" val="neeraj" /></td>
-						<td>Advait</td>
+						<td>Amey</td>
 					</tr>
 
 				</table>
@@ -157,35 +164,89 @@ body {
 
 
 
-
-	Location ${currentLoc}
 	<script>
+		function bindInfoWindow(marker, map, infowindow, html, Ltitle) {
+			google.maps.event.addListener(marker, 'mouseover', function() {
+				infowindow.setContent(html);
+				infowindow.open(map, marker);
+
+			});
+			google.maps.event.addListener(marker, 'mouseout', function() {
+				infowindow.close();
+
+			});
+		}
 		function myMap() {
+
+			var userLocations = [];
+
+			<c:forEach items="${users}" var="currentLoc" varStatus="loop">
+
 			var lat = "${currentLoc.lat}";
 			var longitude = "${currentLoc.longitude}";
 			var bibNo = "${currentLoc.bibNo}";
 			var lastUpdated = "${currentLoc.lastUpdated}";
+			var loc = {};
+			loc.lat = lat;
+			loc.lg = longitude;
+			loc.bibNo = bibNo;
+			loc.lastUpdated = lastUpdated;
+			userLocations.push(loc);
 
-			var myCenter = new google.maps.LatLng(lat, longitude);
-			var mapCanvas = document.getElementById("googleMap");
-			var mapOptions = {
+			</c:forEach>
+
+			// init map 
+			var myCenter = new google.maps.LatLng(userLocations[1].lat,
+					userLocations[1].lg);
+			//var map = new google.maps.Map(mapCanvas, mapOptions);
+
+			var map = new google.maps.Map(document.getElementById('googleMap'),
+					{
+						zoom : 12,
+						center : myCenter,
+						mapTypeId : google.maps.MapTypeId.ROADMAP
+					});
+			var infowindow = new google.maps.InfoWindow({
+				content : ''
+			});
+
+			var markers = [];
+
+			for (var i = 0; i < 3; i++) {
+				var location = userLocations[i];
+				var latLng = new google.maps.LatLng(location.lat, location.lg);
+				var marker = new google.maps.Marker({
+					position : latLng,
+					map : map
+				});
+
+				bindInfoWindow(marker, map, infowindow, "<p>" + "Rider : "
+						+ location.bibNo + " : crossed this location at : "
+						+ location.lastUpdated);
+
+				/* markers.push(marker);
+				var infowindow = new google.maps.InfoWindow({
+					content : "Rider : " + location.bibNo + " : crossed this location at : "
+							+ location.lastUpdated
+				});
+				google.maps.event.addListener(marker, 'click', function() {
+					infowindow.open(map, marker);
+				}); */
+
+			}
+			//var markerCluster = new MarkerClusterer(map, markers);
+
+			/* var mapOptions = {
 				center : myCenter,
 				zoom : 15
-			};
-			var map = new google.maps.Map(mapCanvas, mapOptions);
-			var marker = new google.maps.Marker({
+			}; */
+
+			/* var marker = new google.maps.Marker({
 				position : myCenter
 			});
+			 */
 
-			var infowindow = new google.maps.InfoWindow({
-				content : "Rider : " + bibNo + " : crossed this location at : "
-						+ lastUpdated
-			});
-			google.maps.event.addListener(marker, 'click', function() {
-				infowindow.open(map, marker);
-			});
-
-			marker.setMap(map);
+			//marker.setMap(map);
 		}
 	</script>
 
