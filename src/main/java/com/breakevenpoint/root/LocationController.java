@@ -1,5 +1,6 @@
 package com.breakevenpoint.root;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -97,26 +98,23 @@ public class LocationController implements ApplicationContextAware {
 		String userId = request.getParameter("userId");
 		String riderName = request.getParameter("riderName");
 		String bibNo = request.getParameter("bibNo");
-//		Date d = new Date(Long.parseLong(lastUpdated));
 
-		SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT' yyyy", Locale.US);
-		inputFormat.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
-
-//		SimpleDateFormat outputFormat = new SimpleDateFormat("MMM dd, yyyy h:mm a");
-		// Adjust locale and zone appropriately
-		Date date = inputFormat.parse(lastUpdated);
-//		String outputText = outputFormat.format(date);
+		DateFormat utcFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT' yyyy", Locale.US);
+	    utcFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+	    DateFormat indianFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT' yyyy", Locale.US);
+	    utcFormat.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
+	    Date timestamp = utcFormat.parse(lastUpdated);
 
 		logger.info("Tracking service lt " + lat);
 		logger.info("Tracking service lg :" + lg);
-		logger.info("Tracking service lastUpdated:" + date);
+		logger.info("Tracking service lastUpdated:" + timestamp);
 		logger.info("Tracking service userId:" + userId);
 		Location l = null;
 		l = userLocations.get(userId);
 		if (l != null) {
 			l.setLat(Double.valueOf(lat));
 			l.setLongitude(Double.valueOf(lg));
-			l.setLastUpdated(date);
+			l.setLastUpdated(timestamp);
 			l.setRiderName(riderName);
 			l.setBibNo(bibNo);
 			
