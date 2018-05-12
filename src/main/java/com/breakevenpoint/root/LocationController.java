@@ -200,6 +200,8 @@ public class LocationController implements ApplicationContextAware {
 			l = new Location(riderName, bibNo, userId);
 			l.setLat(Double.valueOf(lat));
 			l.setLongitude(Double.valueOf(lg));
+			l.setLastUpdated(gmtFormat.parse(gmtFormat.format(d)));
+
 			userLocations.put(userId, l);
 		}
 		logger.info("Tracking service Obj " + l);
