@@ -92,17 +92,29 @@ public class LocationController implements ApplicationContextAware {
 		String lg = request.getParameter("lg");
 		String lastUpdated = request.getParameter("lastUpdated");
 		String userId = request.getParameter("userId");
+		
+		String riderName = request.getParameter("riderName");
+
+		String bibNo = request.getParameter("bibNo");
+
 		Date d = new Date(Long.parseLong(lastUpdated));
 		logger.info("Tracking service lt " + lat);
 		logger.info("Tracking service lg :" + lg);
 		logger.info("Tracking service lastUpdated:" + d);
 		logger.info("Tracking service userId:" + userId);
+		logger.info("Tracking service userId:" + riderName);
+
+		logger.info("Tracking service userId:" + bibNo);
+
 		Location l = null;
 		l = userLocations.get(userId);
 		if (l != null) {
 			l.setLat(Double.valueOf(lat));
 			l.setLongitude(Double.valueOf(lg));
 			l.setLastUpdated(d);
+			l.setRiderName(riderName);
+			l.setBibNo(bibNo);
+			
 			userLocations.put(userId, l);
 		} else {
 			l = CURRENT_LOCATION;
@@ -133,7 +145,7 @@ public class LocationController implements ApplicationContextAware {
 		mock.setLongitude(72.751994);
 		mock.setRiderName("Neeraj, Palghar");
 		mock.setLastUpdated(new Date());
-		mock.setUserId("dcadmin");
+		mock.setUserId("admin");
 		return mock;
 	}
 
