@@ -196,8 +196,8 @@ body {
 			</c:forEach>
 
 			// init map 
-			var myCenter = new google.maps.LatLng(userLocations[1].lat,
-					userLocations[1].lg);
+			var myCenter = new google.maps.LatLng(userLocations[0].lat,
+					userLocations[0].lg);
 			//var map = new google.maps.Map(mapCanvas, mapOptions);
 
 			var map = new google.maps.Map(document.getElementById('googleMap'),
