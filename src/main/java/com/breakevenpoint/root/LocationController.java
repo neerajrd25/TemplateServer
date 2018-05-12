@@ -41,7 +41,7 @@ public class LocationController implements ApplicationContextAware {
 
 	private static Map<String, Location> userLocations = new HashMap<>();
 
-	/*static {
+	static {
 		Location l;
 		l = new Location("Divya Tate", "RQ-001", "dc_divya");
 		userLocations.put(l.getUserId(), l);
@@ -50,7 +50,6 @@ public class LocationController implements ApplicationContextAware {
 		l = new Location("Raghu", "RQ-003", "dc_raghu");
 		userLocations.put(l.getUserId(), l);
 	}
-*/
 
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -91,33 +90,27 @@ public class LocationController implements ApplicationContextAware {
 
 	@ResponseBody
 	@RequestMapping(value = { "/submitLocGET" }, method = RequestMethod.GET)
-	public String submitLocationGet(HttpServletRequest request, Model model) {
+	public String submitLocationGet(HttpServletRequest request, Model model) throws ParseException {
 		String lat = request.getParameter("lat");
 		String lg = request.getParameter("lg");
 		String lastUpdated = request.getParameter("lastUpdated");
 		String userId = request.getParameter("userId");
-		
 		String riderName = request.getParameter("riderName");
-
 		String bibNo = request.getParameter("bibNo");
+//		Date d = new Date(Long.parseLong(lastUpdated));
 
-		//Date d = new Date(Long.parseLong(lastUpdated));
-		
 		SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT' yyyy", Locale.US);
 		inputFormat.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
 
 //		SimpleDateFormat outputFormat = new SimpleDateFormat("MMM dd, yyyy h:mm a");
 		// Adjust locale and zone appropriately
 		Date date = inputFormat.parse(lastUpdated);
-		
+//		String outputText = outputFormat.format(date);
+
 		logger.info("Tracking service lt " + lat);
 		logger.info("Tracking service lg :" + lg);
-		logger.info("Tracking service lastUpdated:" + d);
+		logger.info("Tracking service lastUpdated:" + date);
 		logger.info("Tracking service userId:" + userId);
-		logger.info("Tracking service userId:" + riderName);
-
-		logger.info("Tracking service userId:" + bibNo);
-
 		Location l = null;
 		l = userLocations.get(userId);
 		if (l != null) {
@@ -160,7 +153,7 @@ public class LocationController implements ApplicationContextAware {
 		mock.setLongitude(72.751994);
 		mock.setRiderName("Neeraj, Palghar");
 		mock.setLastUpdated(new Date());
-		mock.setUserId("admin");
+		mock.setUserId("dcadmin");
 		return mock;
 	}
 
