@@ -38,7 +38,7 @@ public class LocationController implements ApplicationContextAware {
 
 	private static Map<String, Location> userLocations = new HashMap<>();
 
-	static {
+	/*static {
 		Location l;
 		l = new Location("Divya Tate", "RQ-001", "dc_divya");
 		userLocations.put(l.getUserId(), l);
@@ -47,6 +47,7 @@ public class LocationController implements ApplicationContextAware {
 		l = new Location("Raghu", "RQ-003", "dc_raghu");
 		userLocations.put(l.getUserId(), l);
 	}
+*/
 
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -117,7 +118,10 @@ public class LocationController implements ApplicationContextAware {
 			
 			userLocations.put(userId, l);
 		} else {
-			l = CURRENT_LOCATION;
+			l = new Location(riderName, bibNo, userId);
+			l.setLat(Double.valueOf(lat));
+			l.setLongitude(Double.valueOf(lg));
+			userLocations.put(userId, l);
 
 		}
 
