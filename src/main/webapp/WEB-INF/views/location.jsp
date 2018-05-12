@@ -4,7 +4,7 @@
 <%@ page session="false"%>
 <html>
 <head>
-<title>Home</title>
+<title>AIR Tracker</title>
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
@@ -45,7 +45,7 @@ body {
 	<div class="container">
 		<div class="row">
 			<h1>
-				Deccan Cliffhanger 2018, <small> <i>By Inspire India</i>
+				AIR Tracker, <small> <i>By Audax India</i>
 				</small>
 			</h1>
 		</div>
@@ -59,22 +59,22 @@ body {
 <br/>
 		<div class="row">
 			<div class="col-lg-8">
-				<ul class="nav nav-pills">
+				<!-- <ul class="nav nav-pills">
 					<li class="active"><a href="#">Solo</a></li>
 					<li><a href="#">Team-2</a></li>
 					<li><a href="#">Team-3</a></li>
 					<li><a href="#">Team-4</a></li>
-				</ul>
+				</ul> -->
 
 				<table class="table table-hover table-inverse">
 					<thead>
 						<tr>
-							<th>Position</th>
+							<th>Sr.No</th>
 							<th>Athelete</th>
 							<th>Bib No</th>
 							<th>Last Updated</th>
-							<th>Locate</th>
-
+<!-- 							<th>Locate</th>
+ -->
 						</tr>
 					</thead>
 					<tbody>
@@ -89,12 +89,12 @@ body {
 										<fmt:formatDate type="both" value="${currentLoc.lastUpdated}" />
 									</p>
 								</td>
-								<td><button class="btn btn-info" data-toggle="tooltip" title="Locate ${currentLoc.userId}">Locate</button></td>
-
+<%-- 								<td><button class="btn btn-info" data-toggle="tooltip" title="Locate ${currentLoc.userId}">Locate</button></td>
+ --%>
 							</tr>
 						</c:forEach>
 
-						<tr>
+						<%-- <tr>
 							<th scope="row">4</th>
 							<td>Kabir, Mumbai</td>
 							<td>RQ-62</td>
@@ -110,13 +110,13 @@ body {
 							<td><fmt:formatDate type="both"
 									value="${currentLoc.lastUpdated}" /></td>
 							<td><button class="btn btn-info">Locate</button></td>
-						</tr>
+						</tr> --%>
 					</tbody>
 				</table>
 
 
 			</div>
-			<div class="col-lg-4">
+			<%-- <div class="col-lg-4">
 				<form class="navbar-form" role="search">
 					<div class="input-group">
 						<input type="text" class="form-control"
@@ -156,7 +156,7 @@ body {
 
 
 
-			</div>
+			</div> --%>
 		</div>
 	</div>
 
