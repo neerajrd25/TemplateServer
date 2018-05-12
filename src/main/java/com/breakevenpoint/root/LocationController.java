@@ -98,7 +98,15 @@ public class LocationController implements ApplicationContextAware {
 
 		String bibNo = request.getParameter("bibNo");
 
-		Date d = new Date(Long.parseLong(lastUpdated));
+		//Date d = new Date(Long.parseLong(lastUpdated));
+		
+		SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT' yyyy", Locale.US);
+		inputFormat.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
+
+//		SimpleDateFormat outputFormat = new SimpleDateFormat("MMM dd, yyyy h:mm a");
+		// Adjust locale and zone appropriately
+		Date date = inputFormat.parse(lastUpdated);
+		
 		logger.info("Tracking service lt " + lat);
 		logger.info("Tracking service lg :" + lg);
 		logger.info("Tracking service lastUpdated:" + d);
@@ -112,7 +120,7 @@ public class LocationController implements ApplicationContextAware {
 		if (l != null) {
 			l.setLat(Double.valueOf(lat));
 			l.setLongitude(Double.valueOf(lg));
-			l.setLastUpdated(d);
+			l.setLastUpdated(date);
 			l.setRiderName(riderName);
 			l.setBibNo(bibNo);
 			
