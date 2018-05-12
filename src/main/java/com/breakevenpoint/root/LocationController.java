@@ -192,7 +192,7 @@ public class LocationController implements ApplicationContextAware {
 		if (l != null) {
 			l.setLat(Double.valueOf(lat));
 			l.setLongitude(Double.valueOf(lg));
-			l.setLastUpdated(istFormat.parse(istFormat.format(d)));
+			l.setLastUpdated(istFormat.parse(gmtFormat.format(d)));
 			l.setRiderName(riderName);
 			l.setBibNo(bibNo);
 			userLocations.put(userId, l);
