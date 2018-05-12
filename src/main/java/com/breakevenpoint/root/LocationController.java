@@ -166,7 +166,7 @@ public class LocationController implements ApplicationContextAware {
 		String riderName = request.getParameter("riderName");
 		String bibNo = request.getParameter("bibNo");
 
-//		Date d = new Date(Long.parseLong(lastUpdated));
+		Date d = new Date(Long.parseLong(lastUpdated));
 		
 		DateFormat istFormat = new SimpleDateFormat();
 		DateFormat gmtFormat = new SimpleDateFormat();
@@ -192,7 +192,7 @@ public class LocationController implements ApplicationContextAware {
 		if (l != null) {
 			l.setLat(Double.valueOf(lat));
 			l.setLongitude(Double.valueOf(lg));
-			l.setLastUpdated(istFormat.parse(lastUpdated));
+			l.setLastUpdated(istFormat.parse(istFormat.format(d)));
 			l.setRiderName(riderName);
 			l.setBibNo(bibNo);
 			userLocations.put(userId, l);
