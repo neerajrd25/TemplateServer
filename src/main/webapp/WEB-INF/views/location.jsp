@@ -32,12 +32,13 @@ body {
 
 
 <!-- Latest compiled and minified JavaScript -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+	integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	crossorigin="anonymous"></script>
+
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
 	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-	crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"
-	integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
 	crossorigin="anonymous"></script>
 
 </head>
@@ -56,7 +57,7 @@ body {
 			</div>
 		</div>
 
-<br/>
+		<br />
 		<div class="row">
 			<div class="col-lg-8">
 				<!-- <ul class="nav nav-pills">
@@ -73,7 +74,7 @@ body {
 							<th>Athelete</th>
 							<th>Bib No</th>
 							<th>Last Updated</th>
-<!-- 							<th>Locate</th>
+							<!-- 							<th>Locate</th>
  -->
 						</tr>
 					</thead>
@@ -89,74 +90,15 @@ body {
 										<fmt:formatDate type="both" value="${currentLoc.lastUpdated}" />
 									</p>
 								</td>
-<%-- 								<td><button class="btn btn-info" data-toggle="tooltip" title="Locate ${currentLoc.userId}">Locate</button></td>
- --%>
 							</tr>
 						</c:forEach>
 
-						<%-- <tr>
-							<th scope="row">4</th>
-							<td>Kabir, Mumbai</td>
-							<td>RQ-62</td>
-							<td><fmt:formatDate type="both"
-									value="${currentLoc.lastUpdated}" /></td>
-							<td><button class="btn btn-info">Locate</button></td>
-
-						</tr>
-						<tr>
-							<th scope="row">5</th>
-							<td>Neeraj, Pune</td>
-							<td>RQ-069</td>
-							<td><fmt:formatDate type="both"
-									value="${currentLoc.lastUpdated}" /></td>
-							<td><button class="btn btn-info">Locate</button></td>
-						</tr> --%>
 					</tbody>
 				</table>
 
 
 			</div>
-			<%-- <div class="col-lg-4">
-				<form class="navbar-form" role="search">
-					<div class="input-group">
-						<input type="text" class="form-control"
-							placeholder="Search for..."> <span
-							class="input-group-btn">
-							<button class="btn btn-default" type="button">Go!</button>
-						</span>
-					</div>
-					<!-- /input-group -->
-				</form>
-				<table class="table table-hover table-inverse">
-					<tr class="bg-primary">
-						<td><input type="checkbox" val="all" /></td>
-						<td>All</td>
-					</tr>
-					<c:forEach items="${users}" var="currentLoc">
-						<tr>
-							<td><input type="checkbox" val="${currentLoc.userId}"
-								checked="checked" /></td>
-							<td>${currentLoc.riderName}</td>
-						</tr>
-					</c:forEach>
-					<tr>
-						<td><input type="checkbox" val="neeraj" /></td>
-						<td>Amit</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox" val="neeraj" /></td>
-						<td>Srinivas</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox" val="neeraj" /></td>
-						<td>Amey</td>
-					</tr>
 
-				</table>
-
-
-
-			</div> --%>
 		</div>
 	</div>
 
@@ -176,12 +118,15 @@ body {
 
 			});
 		}
+
 		function myMap() {
 
 			var userLocations = [];
 
 			<c:forEach items="${users}" var="currentLoc" varStatus="loop">
-
+			if("${currentLoc}"!="undefined" && ${currentLoc.lat}!=null){
+				
+			
 			var lat = "${currentLoc.lat}";
 			var longitude = "${currentLoc.longitude}";
 			var bibNo = "${currentLoc.bibNo}";
@@ -192,14 +137,23 @@ body {
 			loc.bibNo = bibNo;
 			loc.lastUpdated = lastUpdated;
 			userLocations.push(loc);
-
+			console.log(userLocations);
+			}
 			</c:forEach>
 
 			// init map 
-			var myCenter = new google.maps.LatLng(userLocations[0].lat,
-					userLocations[0].lg);
+			if (userLocations != "undefined" && userLocations.length > 0) {
+				var myCenter = new google.maps.LatLng(userLocations[0].lat,
+						userLocations[0].lg);
+					
+			}else{
+				var myCenter = new google.maps.LatLng(0,
+						0);
+				
+			}
+			/* var myCenter = new google.maps.LatLng(0,
+					0); */
 			//var map = new google.maps.Map(mapCanvas, mapOptions);
-
 			var map = new google.maps.Map(document.getElementById('googleMap'),
 					{
 						zoom : 12,
@@ -211,42 +165,23 @@ body {
 			});
 
 			var markers = [];
+			if (userLocations != "undefined" && userLocations.length > 0) {
+				for (var i = 0; i < userLocations.length; i++) {
+					var location = userLocations[i];
+					var latLng = new google.maps.LatLng(location.lat,
+							location.lg);
+					var marker = new google.maps.Marker({
+						position : latLng,
+						map : map
+					});
 
-			for (var i = 0; i < 3; i++) {
-				var location = userLocations[i];
-				var latLng = new google.maps.LatLng(location.lat, location.lg);
-				var marker = new google.maps.Marker({
-					position : latLng,
-					map : map
-				});
+					bindInfoWindow(marker, map, infowindow, "<p>" + "Rider : "
+							+ location.bibNo + " : crossed this location at : "
+							+ location.lastUpdated);
 
-				bindInfoWindow(marker, map, infowindow, "<p>" + "Rider : "
-						+ location.bibNo + " : crossed this location at : "
-						+ location.lastUpdated);
-
-				/* markers.push(marker);
-				var infowindow = new google.maps.InfoWindow({
-					content : "Rider : " + location.bibNo + " : crossed this location at : "
-							+ location.lastUpdated
-				});
-				google.maps.event.addListener(marker, 'click', function() {
-					infowindow.open(map, marker);
-				}); */
+				}
 
 			}
-			//var markerCluster = new MarkerClusterer(map, markers);
-
-			/* var mapOptions = {
-				center : myCenter,
-				zoom : 15
-			}; */
-
-			/* var marker = new google.maps.Marker({
-				position : myCenter
-			});
-			 */
-
-			//marker.setMap(map);
 		}
 	</script>
 
