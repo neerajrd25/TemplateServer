@@ -88,18 +88,21 @@ public class LocationController implements ApplicationContextAware {
 
 	 */
 
+	 */
 	@RequestMapping(value = "/track", method = RequestMethod.GET)
-
 	public String liveTrack(Locale locale, Model model) {
-
-		model.addAttribute("currentLoc", CURRENT_LOCATION);
-
+		//model.addAttribute("currentLoc", CURRENT_LOCATION);
 		model.addAttribute("users", new ArrayList<Location>(userLocations.values()));
 
-
-
 		return "location";
+	}
+	@ResponseBody
+	@RequestMapping(value = "/locationList", method = RequestMethod.GET)
+	public List<Location> getLocations(Locale locale, Model model) {
+		//model.addAttribute("currentLoc", CURRENT_LOCATION);
+		
 
+		return new ArrayList<Location>(userLocations.values());
 	}
 
 
@@ -118,91 +121,46 @@ public class LocationController implements ApplicationContextAware {
 
 
 
-	@ResponseBody
-
-	@RequestMapping(value = { "/submitLoc" }, method = RequestMethod.POST)
-
-	public String submitLocation(Model model, HttpServletRequest request, Locale locale,
-
-			@RequestBody String locationJSON) {
-
-		logger.info("Service JSON->" + locationJSON);
-
-
-
-		// JSONObject jsonObj = new
-
-		// JSONObject("{\"phonetype\":\"N95\",\"cat\":\"WP\"}");
-
-		GsonBuilder gsonBuilder = new GsonBuilder();
-
-		// "Mar 5, 2018 4:28:12 PM
-
-		// gsonBuilder.setDateFormat("MMM MM-dd hh:mm:ss a");
-
-		gsonBuilder.setDateFormat("dd MMM yyyy HH:mm:ss");
-
-		Gson gson = gsonBuilder.create();
-
-		CURRENT_LOCATION = gson.fromJson(locationJSON, Location.class);
-
-
-
-		logger.info("Service DATA->" + CURRENT_LOCATION);
-
-		return "SUCCESS";
-
-	}
 
 
 
 	@ResponseBody
 	@RequestMapping(value = { "/submitLocGET" }, method = RequestMethod.GET)
 	public String submitLocationGet(HttpServletRequest request, Model model) throws ParseException {
-		String lat = request.getParameter("lat");
+				String lat = request.getParameter("lat");
 		String lg = request.getParameter("lg");
 		String lastUpdated = request.getParameter("lastUpdated");
-		String userId = request.getParameter("userId");
+		String deviceId = request.getParameter("userId");
 		String riderName = request.getParameter("riderName");
 		String bibNo = request.getParameter("bibNo");
 
+
 		Date d = new Date(Long.parseLong(lastUpdated));
 		
-		DateFormat istFormat = new SimpleDateFormat();
-		DateFormat gmtFormat = new SimpleDateFormat();
-		TimeZone gmtTime = TimeZone.getTimeZone("GMT");
-		TimeZone istTime = TimeZone.getTimeZone("IST");
-		  
-		istFormat.setTimeZone(gmtTime);
-		gmtFormat.setTimeZone(istTime);
-//		System.out.println("GMT Time: " + istFormat.parse(d));
-//		System.out.println("IST Time: " + gmtFormat.format(d));
-		
 		logger.info("Tracking service lt " + lat);
-		logger.info("Tracking service lg :" + lg);
-		logger.info("Tracking service lastUpdated:" + lastUpdated);
-		logger.info("Tracking service userId:" + userId);
-		logger.info("Tracking service userId:" + riderName);
-		logger.info("Tracking service userId:" + bibNo);
+		logger.info("Longitude :" + lg);
+		logger.info("lastUpdated:" + d);
+		logger.info("Tracking service device id:" + deviceId);
+		logger.info("Tracking service riderName:" + riderName);
+		logger.info("Tracking service bibNO:" + bibNo);
 
 		Location l = null;
 
-		l = userLocations.get(userId);
+		l = userLocations.get(deviceId);
 
 		if (l != null) {
 			l.setLat(Double.valueOf(lat));
 			l.setLongitude(Double.valueOf(lg));
-			l.setLastUpdated(gmtFormat.parse(gmtFormat.format(d)));
+			l.setLastUpdated(d);
 			l.setRiderName(riderName);
 			l.setBibNo(bibNo);
-			userLocations.put(userId, l);
+			userLocations.put(deviceId, l);
 		} else {
-			l = new Location(riderName, bibNo, userId);
+			l = new Location(riderName, bibNo, deviceId);
 			l.setLat(Double.valueOf(lat));
 			l.setLongitude(Double.valueOf(lg));
-			l.setLastUpdated(gmtFormat.parse(gmtFormat.format(d)));
-
-			userLocations.put(userId, l);
+			l.setLastUpdated(d);
+			userLocations.put(deviceId, l);
 		}
 		logger.info("Tracking service Obj " + l);
 		return "SUCCESS";
