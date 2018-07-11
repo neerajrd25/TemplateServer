@@ -90,14 +90,17 @@ public class LocationController implements ApplicationContextAware {
 			l.setLastUpdated(d);
 			l.setRiderName(riderName);
 			l.setBibNo(bibNo);
+			l.setDisplayDate(lastUpdated);
 			userLocations.put(deviceId, l);
 		} else {
 			l = new Location(riderName, bibNo, deviceId);
 			l.setLat(Double.valueOf(lat));
 			l.setLongitude(Double.valueOf(lg));
 			l.setLastUpdated(d);
+			l.setDisplayDate(lastUpdated);
 			userLocations.put(deviceId, l);
 		}
+		
 		logger.info("Tracking service Obj " + l);
 		return "SUCCESS";
 
