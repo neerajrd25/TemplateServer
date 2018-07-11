@@ -91,8 +91,9 @@ body {
 								<td>${currentLoc.bibNo}</td>
 								<td>
 									<p>
-										<fmt:formatDate type="both" value="${currentLoc.lastUpdated}" />
-									</p>
+											<%-- 	<fmt:formatDate type="both" value="${currentLoc.lastUpdated}" /> --%>
+									${currentLoc.displayDate}
+										</p>
 								</td>
 								<td>
 
