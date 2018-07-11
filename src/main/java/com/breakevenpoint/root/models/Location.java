@@ -16,7 +16,14 @@ public class Location {
 	String bibNo;
 	Date lastUpdated = new Date();
 	String userId;
-	
+	String displayDate;
+	public String getDisplayDate() {
+		return displayDate;
+	}
+
+	public void setDisplayDate(String displayDate) {
+		this.displayDate = displayDate;
+	}
 
 	public Location() {
 		super();
