@@ -117,7 +117,7 @@ public class LocationController implements ApplicationContextAware {
 		logger.info("Tracking service bibNO:" + bibNo);
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date(Long.valueOf(lastUpdated)));
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("IST"));
 
         Location l = null;
