@@ -1,5 +1,5 @@
 package com.breakevenpoint.root;
-
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import java.util.Calendar;
+import java.util.TimeZone;
+
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -80,6 +83,11 @@ public class LocationController implements ApplicationContextAware {
 		logger.info("Tracking service riderName:" + riderName);
 		logger.info("Tracking service bibNO:" + bibNo);
 
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date(Long.valueOf(lastUpdated)));
+        	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        	sdf.setTimeZone(TimeZone.getTimeZone("IST"));
+
 		Location l = null;
 
 		l = userLocations.get(deviceId);
@@ -90,13 +98,13 @@ public class LocationController implements ApplicationContextAware {
 			l.setLastUpdated(d);
 			l.setRiderName(riderName);
 			l.setBibNo(bibNo);
-			l.setDisplayDate(lastUpdated);
+			l.setDisplayDate(sdf.format(calendar.getTime()));
 			userLocations.put(deviceId, l);
 		} else {
 			l = new Location(riderName, bibNo, deviceId);
 			l.setLat(Double.valueOf(lat));
 			l.setLongitude(Double.valueOf(lg));
-			l.setLastUpdated(d);
+			l.setDisplayDate(sdf.format(calendar.getTime()));
 			l.setDisplayDate(lastUpdated);
 			userLocations.put(deviceId, l);
 		}
