@@ -60,6 +60,8 @@ body {
 		<br />
 		<div class="row">
 			<div class="col-lg-8">
+				<button class="btn btn-info" data-toggle="tooltip">Track
+					All</button>
 				<!-- <ul class="nav nav-pills">
 					<li class="active"><a href="#">Solo</a></li>
 					<li><a href="#">Team-2</a></li>
@@ -67,13 +69,15 @@ body {
 					<li><a href="#">Team-4</a></li>
 				</ul> -->
 
-				<table class="table table-hover table-inverse">
+				<table class="table table-hover table-inverse datatable" id="demotable">
 					<thead>
 						<tr>
 							<th>Sr.No</th>
 							<th>Athelete</th>
 							<th>Bib No</th>
 							<th>Last Updated</th>
+							<th>Track</th>
+							
 							<!-- 							<th>Locate</th>
  -->
 						</tr>
@@ -90,6 +94,12 @@ body {
 										<fmt:formatDate type="both" value="${currentLoc.lastUpdated}" />
 									</p>
 								</td>
+								<td>
+
+										<button class="btn btn-info" data-toggle="tooltip" id="${currentLoc.userId}"
+											title="Locate ${currentLoc.riderName}"
+											onclick="getSelectedRiderLoction('${currentLoc.userId}')">Track</button>
+									</td>
 							</tr>
 						</c:forEach>
 
@@ -182,7 +192,66 @@ body {
 				}
 
 			}
+		}// myMap
+		function getSelectedRiderLoction(userId) {
+			console.log(userId);
+			$.ajax({
+				url : 'http://localhost:8090/root/location/trackRider/',
+				data : {
+					"userId" : userId
+				},
+				type : 'GET',
+				success : function(locatinObj) {
+					console.log(locatinObj);
+					try {
+						var tempObj = locatinObj
+						if (tempObj.match("^<!DOCTYPE")) {
+						//	location.reload();
+						}
+						$("#googleMap").empty();
+
+						// init map 
+						var myCenter = new google.maps.LatLng(tempObj.lat,
+								tempObj.lg);
+						//var map = new google.maps.Map(mapCanvas, mapOptions);
+console.log(tempObj.lat);
+						var map = new google.maps.Map(document
+								.getElementById('googleMap'), {
+							zoom : 12,
+							center : myCenter,
+							mapTypeId : google.maps.MapTypeId.ROADMAP
+						});
+						var infowindow = new google.maps.InfoWindow({
+							content : ''
+						});
+
+						var markers = [];
+
+						var latLng = new google.maps.LatLng(tempObj.lat,
+								tempObj.lg);
+						var marker = new google.maps.Marker({
+							position : latLng,
+							map : map
+						});
+
+						bindInfoWindow(marker, map, infowindow, "<p>"
+								+ "Rider : " + tempObj.bibNo
+								+ " : crossed this location at : "
+								+ tempObj.lastUpdated);
+
+						$("#googleMap").load();
+						location.reload();
+					} catch (err) {
+						//location.reload();
+					}
+				},
+				error : function(e) {
+					// location.reload();
+				}
+			});
 		}
+		
+		
 	</script>
 
 	<script
