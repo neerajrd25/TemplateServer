@@ -35,42 +35,40 @@ import com.google.gson.GsonBuilder;
 @RequestMapping("location")
 public class LocationController implements ApplicationContextAware {
 
-	private static final Logger logger = LoggerFactory.getLogger(LocationController.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(LocationController.class);
 	ApplicationContext context = null;
 
 	private Location CURRENT_LOCATION = mockLocation();
 
 	private static Map<String, Location> userLocations = new HashMap<>();
 
-	/*static {
-		Location l;
-		l = new Location("Divya Tate", "RQ-001", "dc_divya");
-		userLocations.put(l.getUserId(), l);
-		l = new Location("Dantus", "RQ-002", "dc_dantus");
-		userLocations.put(l.getUserId(), l);
-		l = new Location("Raghu", "RQ-003", "dc_raghu");
-		userLocations.put(l.getUserId(), l);
-	}
-*/
+	/*
+	 * static { Location l; l = new Location("Divya Tate", "RQ-001",
+	 * "dc_divya"); userLocations.put(l.getUserId(), l); l = new
+	 * Location("Dantus", "RQ-002", "dc_dantus");
+	 * userLocations.put(l.getUserId(), l); l = new Location("Raghu", "RQ-003",
+	 * "dc_raghu"); userLocations.put(l.getUserId(), l); }
+	 */
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/track", method = RequestMethod.GET)
 	public String liveTrack(Locale locale, Model model) {
-		//model.addAttribute("currentLoc", CURRENT_LOCATION);
-		model.addAttribute("users", new ArrayList<Location>(userLocations.values()));
+		// model.addAttribute("currentLoc", CURRENT_LOCATION);
+		model.addAttribute("users",
+				new ArrayList<Location>(userLocations.values()));
 
 		return "location";
 	}
+
 	@ResponseBody
 	@RequestMapping(value = "/locationList", method = RequestMethod.GET)
 	public List<Location> getLocations(Locale locale, Model model) {
-		//model.addAttribute("currentLoc", CURRENT_LOCATION);
-		
+		// model.addAttribute("currentLoc", CURRENT_LOCATION);
 
 		return new ArrayList<Location>(userLocations.values());
 	}
-
 
 	@RequestMapping(value = "/demoTrack", method = RequestMethod.GET)
 	public String demoTrack(Locale locale, Model model) {
@@ -81,8 +79,8 @@ public class LocationController implements ApplicationContextAware {
 
 	@ResponseBody
 	@RequestMapping(value = { "/submitLoc" }, method = RequestMethod.POST)
-	public String submitLocation(Model model, HttpServletRequest request, Locale locale,
-			@RequestBody String locationJSON) {
+	public String submitLocation(Model model, HttpServletRequest request,
+			Locale locale, @RequestBody String locationJSON) {
 		logger.info("Service JSON->" + locationJSON);
 
 		// JSONObject jsonObj = new
@@ -108,7 +106,6 @@ public class LocationController implements ApplicationContextAware {
 		String riderName = request.getParameter("riderName");
 		String bibNo = request.getParameter("bibNo");
 
-		
 		logger.info("Tracking service lt " + lat);
 		logger.info("Longitude :" + lg);
 		logger.info("lastUpdated:" + lastUpdated);
@@ -117,17 +114,17 @@ public class LocationController implements ApplicationContextAware {
 		logger.info("Tracking service bibNO:" + bibNo);
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date(Long.valueOf(lastUpdated)));
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        sdf.setTimeZone(TimeZone.getTimeZone("IST"));
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		sdf.setTimeZone(TimeZone.getTimeZone("IST"));
 
-        Location l = null;
+		Location l = null;
 		l = userLocations.get(deviceId);
 
 		if (l != null) {
 			l.setLat(Double.valueOf(lat));
 			l.setLongitude(Double.valueOf(lg));
 			l.setDisplayDate(sdf.format(calendar.getTime()));
-			//l.setLastUpdated(d);
+			// l.setLastUpdated(d);
 			l.setRiderName(riderName);
 			l.setBibNo(bibNo);
 			userLocations.put(deviceId, l);
@@ -138,7 +135,7 @@ public class LocationController implements ApplicationContextAware {
 			l.setDisplayDate(lastUpdated);
 			l.setDisplayDate(sdf.format(calendar.getTime()));
 
-			//l.setLastUpdated(d);
+			// l.setLastUpdated(d);
 			userLocations.put(deviceId, l);
 		}
 		logger.info("Tracking service Obj " + l);
@@ -154,7 +151,8 @@ public class LocationController implements ApplicationContextAware {
 	}
 
 	@Override
-	public void setApplicationContext(ApplicationContext ctx) throws BeansException {
+	public void setApplicationContext(ApplicationContext ctx)
+			throws BeansException {
 		this.context = ctx;
 	}
 

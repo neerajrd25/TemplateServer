@@ -23,7 +23,7 @@ public class HTTPClientUtil {
 		
 			Location mockObj= mockLocation();
 			
-			 StringBuilder stringBuilder = new StringBuilder("http://localhost:8080/root/location/submitLocGET?");
+			 StringBuilder stringBuilder = new StringBuilder("http://localhost:8080/location/submitLocGET?");
 		    /* stringBuilder.append("?lat=" );
 		     stringBuilder.append(URLEncoder.encode(String.valueOf(mockObj.getLat()), "UTF-8"));
 		     stringBuilder.append("?lg=" );
@@ -36,6 +36,9 @@ public class HTTPClientUtil {
 		     parameters.put("lg", mockObj.getLongitude());
 		     parameters.put("lastUpdated", mockObj.getLastUpdated().getTime());
 		     parameters.put("userId", mockObj.getUserId());
+		     parameters.put("riderName", mockObj.getRiderName());
+		     parameters.put("bibNo", mockObj.getBibNo());
+		     parameters.put("displayDate", mockObj.getDisplayDate());
 
 		     stringBuilder.append(getParamsString(parameters));
 			
@@ -99,24 +102,12 @@ public class HTTPClientUtil {
 	//@18.5656129,73.7628549,16z
 	private static Location mockLocation() {
 		Location mock = new Location();
-		mock.setBibNo("RQ-069");
-		
-		mock.setUserId("dc_divya");
-		mock.setLat(18.644689);
-		mock.setLongitude(73.736866);
-		
-
-	/*	mock.setUserId("dc_dantus");
-		mock.setLat(18.560716);
-		mock.setLongitude(73.768945);*/
-
-
-		/*mock.setUserId("dc_raghu");
-		mock.setLat(18.5656129);
-		mock.setLongitude(73.7628549);*/
-
-		
-		mock.setRiderName("Neeraj, Palghar");
+		mock.setBibNo("RQ-061");
+		mock.setRiderName("Rama");
+		mock.setUserId("Rama");
+		mock.setLat(18.644675);
+		mock.setLongitude(73.736989);
+		mock.setDisplayDate("25-May-2018");
 		mock.setLastUpdated(new Date());
 		
 		return mock;

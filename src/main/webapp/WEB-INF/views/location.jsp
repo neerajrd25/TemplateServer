@@ -46,7 +46,7 @@ body {
 	<div class="container">
 		<div class="row">
 			<h1>
-				AIR Tracker, <small> <i>By Audax India</i>
+				GOH Tracker, <small> <i>For Bangalore Randonneurs</i>
 				</small>
 			</h1>
 		</div>
@@ -59,48 +59,26 @@ body {
 
 		<br />
 		<div class="row">
-			<div class="col-lg-8">
-				<button class="btn btn-info" data-toggle="tooltip">Track
-					All</button>
-				<!-- <ul class="nav nav-pills">
-					<li class="active"><a href="#">Solo</a></li>
-					<li><a href="#">Team-2</a></li>
-					<li><a href="#">Team-3</a></li>
-					<li><a href="#">Team-4</a></li>
-				</ul> -->
-
-				<table class="table table-hover table-inverse datatable" id="demotable">
+			<div class="col-lg-12">
+				<button class="btn btn-info" data-toggle="tooltip" onclick="getLatestLoction()" id="trackAll">Track All</button>
+				<table class="table table-inverse datatable" id="demotable">
 					<thead>
 						<tr>
 							<th>Sr.No</th>
 							<th>Athelete</th>
 							<th>Bib No</th>
 							<th>Last Updated</th>
-							<th>Track</th>
-							
-							<!-- 							<th>Locate</th>
- -->
 						</tr>
 					</thead>
 					<tbody>
 						<c:forEach items="${users}" var="currentLoc" varStatus="loop">
-
 							<tr>
 								<th scope="row">${loop.index+1}</th>
 								<td>${currentLoc.riderName}</td>
 								<td>${currentLoc.bibNo}</td>
 								<td>
-									<p>
-											<%-- 	<fmt:formatDate type="both" value="${currentLoc.lastUpdated}" /> --%>
-									${currentLoc.displayDate}
-										</p>
+									<p>${currentLoc.displayDate}</p>
 								</td>
-								<td>
-
-										<button class="btn btn-info" data-toggle="tooltip" id="${currentLoc.userId}"
-											title="Locate ${currentLoc.riderName}"
-											onclick="getSelectedRiderLoction('${currentLoc.userId}')">Track</button>
-									</td>
 							</tr>
 						</c:forEach>
 
@@ -142,19 +120,21 @@ body {
 
 			<c:forEach items="${users}" var="currentLoc" varStatus="loop">
 			if("${currentLoc}"!="undefined" && ${currentLoc.lat}!=null){
-				
-			
-			var lat = "${currentLoc.lat}";
-			var longitude = "${currentLoc.longitude}";
-			var bibNo = "${currentLoc.bibNo}";
-			var lastUpdated = "${currentLoc.lastUpdated}";
-			var loc = {};
-			loc.lat = lat;
-			loc.lg = longitude;
-			loc.bibNo = bibNo;
-			loc.lastUpdated = lastUpdated;
-			userLocations.push(loc);
-			console.log(userLocations);
+				var lat = "${currentLoc.lat}";
+				var longitude = "${currentLoc.longitude}";
+				var bibNo = "${currentLoc.bibNo}";
+				var lastUpdated = "${currentLoc.lastUpdated}";
+				var riderName = "${currentLoc.riderName}";
+				var displayDate = "${currentLoc.displayDate}";
+				var loc = {};
+				loc.lat = lat;
+				loc.lg = longitude;
+				loc.bibNo = bibNo;
+				loc.lastUpdated = lastUpdated;
+				loc.riderName = riderName;
+				loc.displayDate = displayDate;
+				userLocations.push(loc);
+				console.log(userLocations);
 			}
 			</c:forEach>
 
@@ -173,7 +153,7 @@ body {
 			//var map = new google.maps.Map(mapCanvas, mapOptions);
 			var map = new google.maps.Map(document.getElementById('googleMap'),
 					{
-						zoom : 12,
+						zoom : 15,
 						center : myCenter,
 						mapTypeId : google.maps.MapTypeId.ROADMAP
 					});
@@ -192,9 +172,9 @@ body {
 						map : map
 					});
 
-					bindInfoWindow(marker, map, infowindow, "<p>" + "Rider : "
-							+ location.bibNo + " : crossed this location at : "
-							+ location.lastUpdated);
+					bindInfoWindow(marker, map, infowindow, "<p style='color:black'>" + "Rider Name : "
+							+ location.riderName + "("+ location.bibNo +")<br/> crossed this location at : "
+							+ location.displayDate+"</p>");
 
 				}
 
@@ -204,7 +184,7 @@ body {
 			var ridePathCordinates =[];
 			var cpMarkers = [];
 
-			$.getJSON( "http://localhost:8090/root/resources/route.json", function( data ) {
+			$.getJSON( "http://localhost:8080/resources/route.json", function( data ) {
 				  var items = [];
 				  $.each( data, function( key, val ) {
 				  items.push(val);
@@ -243,7 +223,7 @@ body {
 		function getSelectedRiderLoction(userId) {
 			console.log(userId);
 			$.ajax({
-				url : 'http://localhost:8090/root/location/trackRider/',
+				url : 'http://localhost:8080/location/trackRider/',
 				data : {
 					"userId" : userId
 				},
@@ -261,10 +241,10 @@ body {
 						var myCenter = new google.maps.LatLng(tempObj.lat,
 								tempObj.lg);
 						//var map = new google.maps.Map(mapCanvas, mapOptions);
-console.log(tempObj.lat);
+						console.log(tempObj.lat);
 						var map = new google.maps.Map(document
 								.getElementById('googleMap'), {
-							zoom : 12,
+							zoom : 15,
 							center : myCenter,
 							mapTypeId : google.maps.MapTypeId.ROADMAP
 						});
@@ -281,10 +261,9 @@ console.log(tempObj.lat);
 							map : map
 						});
 
-						bindInfoWindow(marker, map, infowindow, "<p>"
-								+ "Rider : " + tempObj.bibNo
-								+ " : crossed this location at : "
-								+ tempObj.lastUpdated);
+						bindInfoWindow(marker, map, infowindow, "<p style='color:black'>" + "Rider Name : "
+								+ location.riderName + "("+ location.bibNo +")<br/> crossed this location at : "
+								+ location.displayDate+"</p>");
 
 						$("#googleMap").load();
 						location.reload();
@@ -294,6 +273,57 @@ console.log(tempObj.lat);
 				},
 				error : function(e) {
 					// location.reload();
+				}
+			});
+		}
+		
+		function getLatestLoction() {
+			$("#trackAll").attr("disabled",true);
+			$.ajax({
+				url : 'http://localhost:8080/location/locationList',
+				type : 'GET',
+				success : function(locationList) {
+					console.log('all locations: ',locationList);
+					var myCenter = new google.maps.LatLng(locationList[0].lat,
+							locationList[0].longitude);
+					var map = new google.maps.Map(document.getElementById('googleMap'),
+							{
+								zoom : 15,
+								center : myCenter,
+								mapTypeId : google.maps.MapTypeId.ROADMAP
+							});
+					var infowindow = new google.maps.InfoWindow({
+						content : ''
+					});
+
+					var markers = [];
+					var markup = "";
+					for (var i = 0; i < locationList.length; i++) {
+						var location = locationList[i];
+						var latLng = new google.maps.LatLng(location.lat,
+								location.longitude);
+						var marker = new google.maps.Marker({
+							position : latLng,
+							map : map
+						});
+
+						bindInfoWindow(marker, map, infowindow, "<p style='color:black'>" + "Rider Name : "
+								+ location.riderName + "("+ location.bibNo +")<br/> crossed this location at : "
+								+ location.displayDate+"</p>");
+						
+						markup += "<tr>"
+									+"<th scope='row'>"+(i+1)+"</th>"
+									+"<td>"+location.riderName+"</td>"
+									+"<td>"+location.bibNo+"</td>"
+									+"<td><p>"+location.displayDate+"</p></td>"
+									+"</tr>";
+					}
+					$("table tbody").html(markup);
+					$("#trackAll").attr("disabled",false);
+					
+				}, 
+				error : function(e) {
+					console.log(e);
 				}
 			});
 		}
