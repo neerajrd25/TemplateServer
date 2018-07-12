@@ -204,7 +204,7 @@ body {
 			var ridePathCordinates =[];
 			var cpMarkers = [];
 
-			$.getJSON( "http://localhost:8090/root/resources/route.json", function( data ) {
+			$.getJSON( "https://ridewithgps.com//tracks/5b3b6548bca59240040000e8.json", function( data ) {
 				  var items = [];
 				  $.each( data, function( key, val ) {
 				  items.push(val);
