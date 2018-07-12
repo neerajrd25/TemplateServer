@@ -118,6 +118,12 @@ body {
 
 
 	<script>
+		$(document).ready(function () {
+		
+		
+		
+		
+	});
 		function bindInfoWindow(marker, map, infowindow, html, Ltitle) {
 			google.maps.event.addListener(marker, 'mouseover', function() {
 				infowindow.setContent(html);
@@ -193,6 +199,46 @@ body {
 				}
 
 			}
+			//poly lines
+		  
+			var ridePathCordinates =[];
+			var cpMarkers = [];
+
+			$.getJSON( "http://localhost:8090/root/resources/route.json", function( data ) {
+				  var items = [];
+				  $.each( data, function( key, val ) {
+				  items.push(val);
+				});
+			  var track_points = items[0];
+			  var control_points = items[1];
+
+			  console.log(track_points[0]);
+
+	  
+			  var arrayLength = track_points.length;
+			  for (var i = 0; i < arrayLength; i++) {
+				  var latlg ={};
+
+				  latlg.lat=track_points[i].y;
+				  latlg.lng=track_points[i].x;
+				  ridePathCordinates.push(latlg);
+			      
+			  }
+			  console.log(ridePathCordinates);
+			  
+
+			  console.log("Size " +ridePathCordinates.length);
+			
+			 var flightPath = new google.maps.Polyline({
+			      path: ridePathCordinates,
+			      geodesic: true,
+			      strokeColor: '#FF0000',
+			      strokeOpacity: 1.0,
+			      strokeWeight: 2
+			    });
+				 flightPath.setMap(map);
+				});
+			
 		}// myMap
 		function getSelectedRiderLoction(userId) {
 			console.log(userId);
