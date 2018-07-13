@@ -112,6 +112,15 @@ body {
 				infowindow.close();
 
 			});
+			
+			google.maps.event.addListener(marker, 'click', function() {
+				infowindow.setContent(html);
+				infowindow.open(map, marker);
+			});
+			
+			google.maps.event.addListener(marker, 'blue', function() {
+				infowindow.close();
+			});
 		}
 
 		function myMap() {
