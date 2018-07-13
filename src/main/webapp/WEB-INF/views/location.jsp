@@ -46,7 +46,7 @@ body {
 	<div class="container">
 		<div class="row">
 			<h1>
-				GOH Tracker, <small> <i>For Bangalore Randonneurs</i>
+				GOH Tracker, <small> <i>By Bangalore Randonneurs</i>
 				</small>
 			</h1>
 		</div>
@@ -184,7 +184,7 @@ body {
 			var ridePathCordinates =[];
 			var cpMarkers = [];
 
-			$.getJSON( "http://localhost:8080/resources/route.json", function( data ) {
+			$.getJSON( "https://audaxtracker.herokuapp.com/resources/route.json", function( data ) {
 				  var items = [];
 				  $.each( data, function( key, val ) {
 				  items.push(val);
@@ -223,7 +223,7 @@ body {
 		function getSelectedRiderLoction(userId) {
 			console.log(userId);
 			$.ajax({
-				url : 'http://localhost:8080/location/trackRider/',
+				url : 'https://audaxtracker.herokuapp.com/location/trackRider/',
 				data : {
 					"userId" : userId
 				},
@@ -280,7 +280,7 @@ body {
 		function getLatestLoction() {
 			$("#trackAll").attr("disabled",true);
 			$.ajax({
-				url : 'http://localhost:8080/location/locationList',
+				url : 'https://audaxtracker.herokuapp.com/location/locationList',
 				type : 'GET',
 				success : function(locationList) {
 					console.log('all locations: ',locationList);
