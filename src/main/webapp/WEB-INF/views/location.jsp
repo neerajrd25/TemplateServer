@@ -58,7 +58,7 @@ body {
 				GOH Tracker, <small> <i>By Bangalore Randonneurs</i>
 				</small>
 			</h1>
-			<h3> <a href="https://ridewithgps.com/routes/27961417">Click here to know the <i>1200 km Route</i></a>
+			<h3> <a href="https://ridewithgps.com/routes/27961417" target="_blank">Click here to know the <i>1200 km Route</i></a>
 </h3>
 		</div>
 
