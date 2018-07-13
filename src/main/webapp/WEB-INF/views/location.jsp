@@ -58,6 +58,8 @@ body {
 				GOH Tracker, <small> <i>By Bangalore Randonneurs</i>
 				</small>
 			</h1>
+			<h3> <a href="https://ridewithgps.com/routes/27961417">Click here to know the <i>1200 km Route</i></a>
+</h3>
 		</div>
 
 		<div class="row">
@@ -69,7 +71,7 @@ body {
 		<br />
 		<div class="row">
 			<div class="col-lg-12">
-				<button class="btn btn-info" data-toggle="tooltip" onclick="getLatestLoction()" id="trackAll">Track All</button>
+				<button class="btn btn-info" data-toggle="tooltip" onclick="getLatestLoction()" id="trackAll">Refresh</button>
 				<table class="table table-inverse datatable" id="demotable">
 					<thead>
 						<tr>
